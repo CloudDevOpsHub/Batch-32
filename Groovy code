@@ -1,0 +1,65 @@
+pipeline {
+     agent any
+     stages{
+        stage(‘’){
+          steps{
+
+           }
+        }
+     }
+ }
+
+
+
+
+-----------------------linux--------------------
+
+
+pipeline {
+agent any
+
+    stages {
+        stage('Git clone') {
+            steps {
+            git branch: 'main', url: 'https://github.com/DevSecOpsG/helloworldsimplejavaprogram'
+            }
+        }
+        stage('Build'){
+            steps{
+            sh 'javac helloworld.java'
+            }
+        }
+        stage('Run'){
+            steps{
+            sh 'java Simple'
+            }
+        }
+    }
+}
+
+
+
+-----------------------------windows-------------
+
+pipeline {
+agent any
+
+    stages {
+        stage('Git clone') {
+            steps {
+            git branch: 'main', url: 'https://github.com/DevSecOpsG/helloworldsimplejavaprogram'
+            }
+        }
+        stage('Build'){
+            steps{
+            bat '''set path=C:\\Program Files\\Java\\jdk1.8.0_311\\bin\\
+            javac helloworld.java'''
+            }
+        }
+		stage('Run'){
+            steps{
+            bat 'java Simple'
+            }
+        }
+   }
+}
