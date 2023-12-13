@@ -1,4 +1,4 @@
-art 1 Create 3  Docker container 
+Part 1 Create 3 ubuntu VM’s or Docker container 
 Step 1 Go to docker playground create an  instance / node and create 3 Ubuntu  container 
 
 1st - ansible_master 
@@ -7,47 +7,35 @@ Step 1 Go to docker playground create an  instance / node and create 3 Ubuntu  c
 
 Step 2 create containers     apt-get update && apt install docker.io -y
 
-docker -v
-Docker version 24.0.5, build 24.0.5-0ubuntu1~20.04.1
-
-done 
-
-docker ps
-docker images
-
 docker run -itd --name ansible_master ubuntu /bin/bash
 docker run -itd --name target1 ubuntu /bin/bash
 docker run -itd --name target2 ubuntu /bin/bash
 
-
-
-
-done 
-
 Step 3 check the process and name for verification 
 docker ps
 
-root@safi:~# docker ps
-CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS              PORTS     NAMES
-122670c7d447   ubuntu    "/bin/bash"   4 seconds ago        Up 4 seconds                  target2
-9160ebd52836   ubuntu    "/bin/bash"   47 seconds ago       Up 46 seconds                 target1
-f319c04bc190   ubuntu    "/bin/bash"   About a minute ago   Up About a minute             ansible_master
+root@instance-2:~# docker ps
+CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS          PORTS     NAMES
+ce5f0c7cc7fd   ubuntu    "/bin/bash"   3 seconds ago    Up 2 seconds              target2
+7f2c829f296d   ubuntu    "/bin/bash"   9 seconds ago    Up 8 seconds              target1
+1cac99ca15e7   ubuntu    "/bin/bash"   17 seconds ago   Up 15 seconds             ansible_master
+
 
 done 
+
+
 
 Part 2 install Ansible and requies tools in ansible_master 
 Step 4 go to ansible_master container  update the ubuntu and install some dependencies and ansible
 
 docker exec -it ansible_master bash
-
 apt update
 apt install python-is-python3 ansible vim iputils-ping openssh-client -y
         Geographical area 6 city 44
-		
 ansible --version
 
 
-if issue ---------------------------
+---if issue -----
 
 Optional If Python not installed or Ansible config file  = NONE
 
@@ -66,9 +54,7 @@ if any Error in installation then fix apt via        -     apt --fix-broken inst
 
 https://www.ansiblepilot.com/articles/how-to-install-ansible-in-ubuntu-20.04-ansible-install/
 
-
-
--------------------
+done -------------
 
 Part 3 Setup n number of target machines (2)/ container(2)Login to Target and setup target 1 
 
@@ -81,29 +67,28 @@ apt install vim python-is-python3 iputils-ping openssh-client -y
 apt-get install openssh-client openssh-server -y
 Geographical area 6 city 44
 
-done 
-
 Step 7 edit sshd_config to allow SSH and root login as ansible requires
 
 cd /etc/ssh 
 vi sshd_config
-uncomment the parameter and modify the permission to yes 
-PermitRootLogin yes and PasswordAuthentication yes
-
-done 
+uncomment the parameter and modify the permission to yes PermitRootLogin yes and PasswordAuthentication yes
 
 Step 8 Start the service ssh if its not running
 service ssh status
 service ssh start 
-service ssh status  
+service ssh status 
 
+done ssh running 
 
-------------------------
+--------------------
 
 Step 9 change the root password to admin 
 passwd root
 Admin
 Admin
+
+done 
+
 
 
 Part 4 Perform the same all steps with target 2 and so on
@@ -114,13 +99,10 @@ Part 5  Find the IP’s of all targets container  for adding in ansible host fil
 Come out to docker node and run the command 
 
 Step 11
-sudo docker inspect target1
-sudo docker inspect target2 
+sudo docker inspect target1          172.17.0.3
+sudo docker inspect target2          172.17.0.4
 
-
-You will find the IPAddress like 172.17.0.3
-
------------------
+----------done   ---------------
 
 Part 6 setup ansible_master for ssh connectivity  and adding IP’s in hostfile
 
@@ -139,9 +121,8 @@ Step 14 verify as you are able to ping target machine from ansible_master
 
 Ping  <Target machine IP>
 
-woking done 
 
---------------------------
+-----------------
 
 go back to master machine
 
@@ -151,7 +132,11 @@ generate the ssh key from the ssh-keygen command
 ssh-keygen
 provide 3 times enter    (1 location verification + 2 time for passwd )
 
-------------
+
+
+You will find the IPAddress like 172.17.0.3
+
+-----------
 
 Part 7 copy the generated ssh keys from ansible_master to target machine and check the connectivity
 
@@ -159,3 +144,72 @@ Step 15 Copy the generated key from ansible_master to remote target
 
 ssh-copy-id root@172.17.0.3
 yes
+
+--------done 
+
+
+Step 16   You should be able to connect via target machine from ansible_master 
+ssh root@172.17.0.3
+
+verify nginx is there or not 
+
+service nginx status
+
+Part 8 Now create a ansible playbook  and run  ansible-playbook 
+
+Step 17 :- create a installnginx.yaml file in 
+cd /etc/ansible
+vi  installnginx.yaml
+
+
+---
+- hosts: webservers
+  tasks:
+    - name: ensure nginx is at the latest version
+      apt: name=openjdk8 state=latest
+
+
+------- run the playbook 
+
+Step 18 :   Run ansible playbook
+
+ansible-playbook installnginx.yaml
+
+
+
+TCS , infosys , wipro   b e ready ...
+
+
+
+vijay G - wipro
+Ashsih Infy
+Jyoti NTT 
+Dell Technlogies  --- Anup 
+
+-----------
+
+ansible-playbook ansibleplaybookwithroles/openjdk8.yml
+
+
+sudo -i
+apt update 
+
+
+
+linux  
+
+My name is ---- &vikas
+
+ansible-playbook ansibleplaybookwithroles/maven.yml
+
+ansible-galaxy init nginxrole
+  
+- Role nginxrole was created successfully
+
+
+
+ 
+
+
+
+ansible all -m ping
